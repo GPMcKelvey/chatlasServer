@@ -17,6 +17,11 @@ const app = Express();
 const server = http.createServer(app);
 const io = socketio(server);
 
+//middleware
+app.use(middleware.CORS);
+app.use(Express.json());
+//app.use(router);
+
 //socket.io
 io.on('connectio', (socket) => {
     console.log("New connection.");
@@ -28,10 +33,6 @@ io.on('connectio', (socket) => {
 
 
 
-//middleware
-app.use(middleware.CORS);
-app.use(Express.json());
-app.use(router);
 
 //endpoints
 app.use('/users', controllers.userController);
