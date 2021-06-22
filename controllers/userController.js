@@ -8,11 +8,12 @@ const validateJWT = require('../middleware/validateSession');
 
 //sign up
 router.post('/signup', async (req, res) => {
-    const {username, password, admin} = req.body.user;
+    const {username, password, email, admin} = req.body.user;
     try {
         await models.UsersModel.create({
             username: username,
             password: bcrypt.hashSync(password, 10),
+            email: email,
             //admin is a boolean value to restrict access to various areas of the application
             admin: admin
         })
