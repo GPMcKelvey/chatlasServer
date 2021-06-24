@@ -14,11 +14,16 @@ const router = require('./router');
 
 //instantiation & socket.io
 const app = Express();
-const server = http.createServer(app);
+const server = http.createServer();
 const io = socketio(server);
 
+//middleware
+app.use(middleware.CORS);
+app.use(Express.json());
+app.use(router);
+
 //socket.io
-io.on('connectio', (socket) => {
+io.on('connection', (socket) => {
     console.log("New connection.");
 
     socket.on('disconnect', () => {
@@ -26,16 +31,20 @@ io.on('connectio', (socket) => {
     })
 });
 
-
-
-//middleware
-app.use(middleware.CORS);
-app.use(Express.json());
-app.use(router);
-
 //endpoints
 app.use('/users', controllers.userController);
-app.use('/chat', controllers.chatController);
+//app.use('/chat', controllers.chatController);
 
 
-server.listen(PORT, () => console.log(`Server is listening on port ${PORT}`))
+//server.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
+try{
+    dbConnection.authenticate()
+        .then(async () => await dbConnection.sync())
+        .then(() => {
+            app.listen(process.env.PORT, () => {
+                console.log(`[server]: App is listening on ${process.env.PORT}.`);
+            });
+        });
+} catch (err) {
+        console.log(`[server]: Server crashed. Error = ${err}`);
+    };

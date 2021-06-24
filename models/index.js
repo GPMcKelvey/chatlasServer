@@ -3,9 +3,9 @@ const db = require('../db');
 const UsersModel = require('./users');
 const ChatModel = require('./chat');
 
-UsersModel.hasMany(ChatModel);
+// UsersModel.hasMany(ChatModel);
 
-ChatModel.belongsTo(UsersModel);
+// ChatModel.belongsTo(UsersModel);
 
 module.exports = {
     dbConnection: db,
